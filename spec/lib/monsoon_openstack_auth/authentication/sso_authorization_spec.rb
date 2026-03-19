@@ -26,17 +26,14 @@ describe 'MonsoonOpenstackAuth::Authentication::AuthSession SSO Authorization' d
       double('controller').as_null_object.tap do |c|
         allow(c).to receive(:params).and_return({})
         allow(c).to receive(:request).and_return(double('request', env: {}).as_null_object)
+        allow(c).to receive(:session).and_return(session_hash)
         allow(c).to receive(:[]).and_return(session_hash)
         allow(c).to receive(:[]=) { |key, val| session_hash[key] = val }
       end
     end
 
     let(:auth_session) do
-      MonsoonOpenstackAuth::Authentication::AuthSession.new(
-        controller,
-        MonsoonOpenstackAuth::Authentication::TokenStore.new(controller),
-        {}
-      )
+      MonsoonOpenstackAuth::Authentication::AuthSession.new(controller, {})
     end
 
     context 'when SSO auth is disabled' do
